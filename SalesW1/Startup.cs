@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using SalesW1.Data;
 
 namespace SalesW1
 {
@@ -33,6 +35,15 @@ namespace SalesW1
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // Using SQL Server
+            //services.AddDbContext<SalesW1Context>(options =>
+            //        options.UseSqlServer(Configuration.GetConnectionString("SalesW1Context")));
+
+            // Using MySQL
+            services.AddDbContext<SalesW1Context>(options =>
+                    options.UseMySql(Configuration.GetConnectionString("SalesW1Context"), builder => 
+                    builder.MigrationsAssembly("SalesW1")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
