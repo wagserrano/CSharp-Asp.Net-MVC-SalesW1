@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SalesW1.Models;
+using SalesW1.Models.ViewModels;
 
 namespace SalesW1.Controllers
 {
@@ -17,7 +17,8 @@ namespace SalesW1.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "The W1 Sales Web System.";
+            ViewData["email"] = "wagserrano@gmail.com";
 
             return View();
         }
