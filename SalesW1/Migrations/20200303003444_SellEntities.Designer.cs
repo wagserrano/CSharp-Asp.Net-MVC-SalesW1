@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SalesW1.Data;
 
 namespace SalesW1.Migrations
 {
     [DbContext(typeof(SalesW1Context))]
-    partial class SalesW1ContextModelSnapshot : ModelSnapshot
+    [Migration("20200303003444_SellEntities")]
+    partial class SellEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

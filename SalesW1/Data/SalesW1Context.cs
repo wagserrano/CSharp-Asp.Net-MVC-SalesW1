@@ -14,6 +14,9 @@ namespace SalesW1.Data
         {
         }
 
-        public DbSet<SalesW1.Models.Department> Department { get; set; }
+        //public DbSet<SalesW1.Models.Department> Department { get; set; } => COM ou SEM SalesW1.Models FUNCIONA, por estar no mesmo namespace
+        public DbSet<Department> Department { get; set; }
+        public DbSet<Seller> Seller { get; set; }
+        public DbSet<SalesRecord> SalesRecord { get; set; }
     }
 }
