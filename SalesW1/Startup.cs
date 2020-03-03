@@ -44,14 +44,18 @@ namespace SalesW1
             services.AddDbContext<SalesW1Context>(options =>
                     options.UseMySql(Configuration.GetConnectionString("SalesW1Context"), builder => 
                     builder.MigrationsAssembly("SalesW1")));
+
+            // Registring de Dependency Injection by the SeedingService
+            services.AddScoped<SeedindService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedindService seedindService)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                seedindService.Seed();
             }
             else
             {
