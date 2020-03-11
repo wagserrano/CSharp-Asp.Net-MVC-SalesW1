@@ -8,16 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using SalesW1.Data;
 using SalesW1.Models;
 using SalesW1.Services;
+using SalesW1.Models.ViewModels;
 
 namespace SalesW1.Controllers
 {
     public class SellersController : Controller
     {
         private readonly SellerService _sellerService;
+        private readonly DepartmentService _departmentService;
 
-        public SellersController(SellerService sellerService)
+        public SellersController(SellerService sellerService, DepartmentService departmentService)
         {
             _sellerService = sellerService;
+            _departmentService = departmentService;
         }
 
         // Sincronous
@@ -27,6 +30,23 @@ namespace SalesW1.Controllers
             return View(list);
         }
 
+        public IActionResult Create()
+        {
+            var departaments = _departmentService.ListAll();
+            var viewModel = new SellerFormViewModel { Department = departaments };
+            return View(viewModel);
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Seller seller)
+        {
+            _sellerService.Insert(seller);
+            //return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
+        }
         // Assincronous
         //// GET: Sellers   
         //public async Task<IActionResult> Index()
