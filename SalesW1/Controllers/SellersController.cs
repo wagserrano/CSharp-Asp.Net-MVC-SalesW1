@@ -9,6 +9,8 @@ using SalesW1.Data;
 using SalesW1.Models;
 using SalesW1.Services;
 using SalesW1.Models.ViewModels;
+using SalesW1.Services.Exceptions;
+using System.Diagnostics;
 
 namespace SalesW1.Controllers
 {
@@ -35,8 +37,6 @@ namespace SalesW1.Controllers
             var departaments = _departmentService.ListAll();
             var viewModel = new SellerFormViewModel { Department = departaments };
             return View(viewModel);
-
-            return View();
         }
 
         [HttpPost]
@@ -46,6 +46,105 @@ namespace SalesW1.Controllers
             _sellerService.Insert(seller);
             //return RedirectToAction("Index");
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id doesn't exist" });
+            }
+
+            var seller = _sellerService.FindById(id.Value);
+            
+            if (seller == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Seller is Not found" });
+            }
+
+            return View(seller);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            _sellerService.Remove(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id doesn't exist" });
+            }
+
+            var obj = _sellerService.FindById(id.Value);
+
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Seller is Not found" });
+            }
+
+            return View(obj);
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id doesn't exist" });
+            }
+
+            var seller = _sellerService.FindById(id.Value);
+
+            if (seller == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Seller is Not found" });
+            }
+
+            List<Department> myDepartments = _departmentService.ListAll();
+            SellerFormViewModel sellerViewModel = new SellerFormViewModel { Seller = seller, Department = myDepartments  };
+            return View(sellerViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Seller seller)
+        {
+            if (id != seller.Id)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
+            }
+
+            try
+            {
+                _sellerService.Update(seller);
+                return RedirectToAction(nameof(Index));
+            }
+            catch(ApplicationException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+            //catch (NotFoundException e)
+            //{
+            //    return RedirectToAction(nameof(Error), new { message = e.Message });
+            //}
+            //catch (DbConcurrencyException e)
+            //{
+            //    return RedirectToAction(nameof(Error), new { message = e.Message });
+            //}
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(viewModel);
         }
         // Assincronous
         //// GET: Sellers   
