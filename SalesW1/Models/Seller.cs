@@ -32,7 +32,7 @@ namespace SalesW1.Models
 
         public Department Department { get; set; }
         public int DepartmentId { get; set; }
-        public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();
+        public ICollection<SalesRecords> Sales { get; set; } = new List<SalesRecords>();
 
         public Seller()
         {
@@ -49,12 +49,12 @@ namespace SalesW1.Models
             Department = department;
         }
 
-        public void AddSales(SalesRecord slrec)
+        public void AddSales(SalesRecords slrec)
         {
             Sales.Add(slrec);
         }
 
-        public void DelSales(SalesRecord slrec)
+        public void DelSales(SalesRecords slrec)
         {
             Sales.Remove(slrec);
         }
