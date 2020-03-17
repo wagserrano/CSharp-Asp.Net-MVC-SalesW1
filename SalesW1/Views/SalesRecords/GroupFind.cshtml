@@ -1,7 +1,72 @@
-﻿
+﻿@model IEnumerable<IGrouping<SalesW1.Models.Department, SalesW1.Models.SalesRecords>>
 @{
     ViewData["Title"] = "Group Find";
+    //DateTime minDate = DateTime.Parse(ViewData["minDate"] as string);
+    //DateTime maxDate = DateTime.Parse(ViewData["maxDate"] as string);
 }
 
 <h2>@ViewData["Title"]</h2>
 
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+                <label for="minDate">Min Date</label>
+                <input type="date" name="minDate" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="maxDate" class="col-lg-2 control-label">Max Date</label>
+                <input type="date" name="maxDate" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Filtering</button>
+        </form>
+    </div>
+</nav>
+
+@foreach (var departmentGroup in Model)
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Department @departmentGroup.Key.Name, Total Sales = @departmentGroup.Sum(obj => obj.Amount).ToString("F2"))</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table-striped table-hover">
+                <thead>
+                    <tr class="success">
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                        <th>
+                            Seller
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in departmentGroup)
+                    {
+                        <tr>
+                            <th>
+                                @Html.DisplayFor(model => item.Date)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => item.Amount)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => item.Seller.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => item.Status)
+                            </th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
